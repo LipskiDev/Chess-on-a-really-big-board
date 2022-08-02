@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 
-function Square(props) {
+function Square(props: any) {
   return (
     <button className="square" onClick={props.onClick}>
       {props.value}
@@ -9,8 +9,8 @@ function Square(props) {
   );
 }
 
-function Board(props) {
-  function renderSquare(i) {
+function Board(props: any) {
+  function renderSquare(i: number) {
     return <Square value={props.squares[i]} onClick={() => props.onClick(i)} />;
   }
 
@@ -35,7 +35,7 @@ function Board(props) {
   );
 }
 
-function Game(_props) {
+function Game(props: any) {
   const [state, setState] = useState({
     history: [
       {
@@ -46,7 +46,7 @@ function Game(_props) {
     stepNumber: 0,
   });
 
-  function jumpTo(step) {
+  function jumpTo(step: number) {
     setState({
       ...state,
       stepNumber: step,
@@ -54,7 +54,7 @@ function Game(_props) {
     });
   }
 
-  function handleClick(i) {
+  function handleClick(i: number) {
     const history = state.history.slice(0, state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
@@ -99,7 +99,10 @@ function Game(_props) {
   return (
     <div className="container-mega-game-div">
       <div className="game-board">
-        <Board squares={current.squares} onClick={(i) => handleClick(i)} />
+        <Board
+          squares={current.squares}
+          onClick={(i: number) => handleClick(i)}
+        />
       </div>
       <div className="game-info">
         <div>{status}</div>
@@ -109,7 +112,7 @@ function Game(_props) {
   );
 }
 
-function calculateWinner(squares) {
+function calculateWinner(squares: any) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -121,7 +124,7 @@ function calculateWinner(squares) {
     [2, 4, 6],
   ];
 
-  const emptySquares = {};
+  const emptySquares: { [square: number]: string } = {};
 
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
