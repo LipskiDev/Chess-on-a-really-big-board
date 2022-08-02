@@ -1,41 +1,35 @@
-#root {
-  max-width: 1280px;
+.square {
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  padding: 0;
+  vertical-align: top;
+}
+
+.board-row {
+  max-height: 1.5rem;
+  min-width: fit-content;
+  margin: 0;
+}
+
+.container-mega-game-div {
+  width: 500px;
+  height: 100vh;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+@media (max-width: 500px) {
+  .container-mega-game-div {
+    width: 100%;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.game-board {
+  max-width: fit-content;
+  margin: 0 auto;
+  padding-top: 10vh;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.game-info {
+  margin: 0 auto;
+  width: fit-content;
 }
