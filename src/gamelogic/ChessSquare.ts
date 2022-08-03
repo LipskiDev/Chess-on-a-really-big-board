@@ -1,18 +1,14 @@
+import ChessPiece from "./chesspieces/ChessPiece";
+
 class ChessSquare {
-  readonly piece;
-  constructor(piece: SquarePiece) {
+  piece: ChessPiece;
+  constructor(piece: ChessPiece) {
     this.piece = piece;
   }
-}
 
-export enum SquarePiece {
-  EMPTY,
-  PAWN,
-  BISHOP,
-  QUEEN,
-  KING,
-  ROOK,
-  KNIGHT,
+  getLetterForPiece() {
+    return this.piece.getLetter;
+  }
 }
 
 export default ChessSquare;
