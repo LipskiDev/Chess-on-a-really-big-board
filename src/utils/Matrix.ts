@@ -1,4 +1,4 @@
-interface Matrix<T> extends Omit<T[][], "forEach"> {
+export interface Matrix<T> extends Omit<T[][], "forEach"> {
   readonly rows: number;
   readonly columns: number;
 
