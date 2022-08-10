@@ -1,13 +1,18 @@
 import ChessPiece from "./chesspieces/ChessPiece";
 
 class ChessSquare {
-  piece: ChessPiece;
-  constructor(piece: ChessPiece) {
+  piece: ChessPiece | null;
+  constructor(piece: ChessPiece | null) {
     this.piece = piece;
   }
 
-  getLetterForPiece() {
-    return this.piece.getLetter;
+  getImageForPiece(): string {
+    if (this.piece === null) return "";
+    return this.piece.getPicture();
+  }
+
+  setPiece(piece: ChessPiece | null) {
+    this.piece = piece;
   }
 }
 

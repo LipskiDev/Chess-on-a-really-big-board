@@ -3,15 +3,26 @@ import { Matrix } from "../utils/Matrix";
 import { Square } from "./Square";
 
 export function Board(props: { chessBoard: Matrix<ChessSquare> }) {
-  function renderSquare(chessSquare: ChessSquare) {
-    return <Square chessSquare={chessSquare} />;
+  function renderSquare(
+    chessSquare: ChessSquare,
+    rowIndex: number,
+    columnIndex: number
+  ) {
+    return (
+      <Square
+        chessSquare={chessSquare}
+        squareColor={(rowIndex + columnIndex) % 2 === 1 ? 1 : 0}
+      />
+    );
   }
 
   function renderBoard() {
-    return props.chessBoard.map((row) => {
+    return props.chessBoard.map((row, rowIndex) => {
       return (
         <div className="board-row">
-          {row.map((chessSquare) => renderSquare(chessSquare))}
+          {row.map((chessSquare, columnIndex) =>
+            renderSquare(chessSquare, rowIndex, columnIndex)
+          )}
         </div>
       );
     });
