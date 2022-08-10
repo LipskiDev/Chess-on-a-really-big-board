@@ -1,16 +1,33 @@
 .square {
-  min-height: 1.5rem;
-  min-width: 1.5rem;
+  min-height: 3.5rem;
+  min-width: 3.5rem;
+  max-height: fit-content;
   padding: 0;
   vertical-align: top;
+}
+
+.blackSquare {
+  min-height: 3.5rem;
+  min-width: 3.5rem;
+  max-height: fit-content;
+  padding: 0;
+  vertical-align: top;
+  background-color: brown;
+}
+
+.whiteSquare {
+  min-height: 3.5rem;
+  min-width: 3.5rem;
+  max-height: fit-content;
+  padding: 0;
+  vertical-align: top;
+  background-color: bisque;
 }
 
 /*
   TODO: fix overflow
 */
 .board-row {
-  max-height: 1.5rem;
-  min-width: fit-content;
   margin: 0;
   overflow: hidden;
 }
