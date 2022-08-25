@@ -3,14 +3,18 @@ import ChessPiece from "./ChessPiece";
 class ChessQueen extends ChessPiece {
   constructor(player: number) {
     super(player);
+
+    //TODO: change the way moves are done
+    //adds all allowed moves to the piece
+    super.addHorizontalMoves();
+    super.addVerticalMoves();
+    super.addDiagonalMoves();
   }
 
   getLetter(): String {
     return "♕";
   }
-  getAllowedMoves(): Set<{ x: number; y: number }> {
-    throw new Error("Method not implemented.");
-  }
+
   getPicture(): string {
     if (this.player === 1)
       return "https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg";

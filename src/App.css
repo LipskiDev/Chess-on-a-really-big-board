@@ -15,6 +15,15 @@
   background-color: brown;
 }
 
+.blackSquareHighlighted {
+  min-height: 3.5rem;
+  min-width: 3.5rem;
+  max-height: fit-content;
+  padding: 0;
+  vertical-align: top;
+  background-color: rgba(165, 42, 42, 0.418);
+}
+
 .whiteSquare {
   min-height: 3.5rem;
   min-width: 3.5rem;
@@ -22,6 +31,15 @@
   padding: 0;
   vertical-align: top;
   background-color: bisque;
+}
+
+.whiteSquareHighlighted {
+  min-height: 3.5rem;
+  min-width: 3.5rem;
+  max-height: fit-content;
+  padding: 0;
+  vertical-align: top;
+  background-color: rgba(165, 42, 42, 0.418);
 }
 
 /*

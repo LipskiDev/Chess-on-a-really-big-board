@@ -3,14 +3,15 @@ import ChessPiece from "./ChessPiece";
 class ChessPawn extends ChessPiece {
   constructor(player: number) {
     super(player);
+
+    //TODO: change the way moves are done
+    //adds all allowed moves to the piece
+    this.moves.add({ x: 0, y: 1 });
+    this.moves.add({ x: 0, y: 2 });
   }
 
   getLetter(): String {
     return "♙";
-  }
-
-  getAllowedMoves(): Set<{ x: number; y: number }> {
-    throw new Error("Method not implemented.");
   }
 
   getPicture(): string {
