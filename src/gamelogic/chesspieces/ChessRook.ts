@@ -1,17 +1,28 @@
+import Move from "../Move";
+import MoveGenerator from "../MoveGenerator";
 import ChessPiece from "./ChessPiece";
 
 class ChessRook extends ChessPiece {
   constructor(player: number) {
     super(player);
-
-    //TODO: change the way moves are done
-    //adds all allowed moves to the piece
-    super.addHorizontalMoves();
-    super.addVerticalMoves();
   }
 
   getLetter(): String {
     return "♖";
+  }
+
+  getMoves(x: number, y: number) {
+    let moveList = new Set<Move>();
+
+    MoveGenerator.generateHorizontalMoves(x, y, 100).forEach(function (move) {
+      moveList.add(move);
+    });
+
+    MoveGenerator.generateVerticalMoves(x, y, 100).forEach(function (move) {
+      moveList.add(move);
+    });
+
+    return moveList;
   }
 
   getPicture(): string {

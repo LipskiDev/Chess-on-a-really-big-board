@@ -1,3 +1,5 @@
+import Move from "../Move";
+import MoveGenerator from "../MoveGenerator";
 import ChessPiece from "./ChessPiece";
 
 class ChessBishop extends ChessPiece {
@@ -6,11 +8,20 @@ class ChessBishop extends ChessPiece {
 
     //TODO: change the way moves are done
     //adds all allowed moves to the piece
-    super.addDiagonalMoves();
   }
 
   getLetter(): String {
     return "♗";
+  }
+
+  getMoves(x: number, y: number) {
+    let moveList = new Set<Move>();
+
+    MoveGenerator.generateDiagonalMoves(x, y, 100).forEach(function (move) {
+      moveList.add(move);
+    });
+
+    return moveList;
   }
 
   getPicture(): string {

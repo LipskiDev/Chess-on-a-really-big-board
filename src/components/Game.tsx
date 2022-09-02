@@ -1,11 +1,10 @@
 import { useState } from "react";
 import ChessBoard from "../gamelogic/ChessBoard";
-import ChessSquare from "../gamelogic/ChessSquare";
-import ChessPawn from "../gamelogic/chesspieces/ChessPawn";
 import { Board } from "./Board";
-import ChessRook from "../gamelogic/chesspieces/ChessRook";
 import ChessPiece from "../gamelogic/chesspieces/ChessPiece";
-import ChessQueen from "../gamelogic/chesspieces/ChessQueen";
+import MoveValidator from "../gamelogic/GameValidator";
+import Move from "../gamelogic/Move";
+import GameValidator from "../gamelogic/GameValidator";
 
 function Game(props: { chessBoard: ChessBoard }) {
   const [board, setBoard] = useState(props.chessBoard);
@@ -23,29 +22,38 @@ function Game(props: { chessBoard: ChessBoard }) {
 
   function handleClick(x: number, y: number) {
     let boardCopy: ChessBoard = Object.create(board);
+    var piece: ChessPiece | null = boardCopy.getSquare(x, y)!.piece;
 
     if (board.selectionMode === -1) {
       boardCopy.highlightedSquares.clear();
 
-      var piece: ChessPiece | null = boardCopy.getPiece(x, y);
       if (piece === null) {
         setBoard(boardCopy);
         return;
       }
       boardCopy.lastSelectedSquare = { x: x, y: y };
 
-      var possibleMoves: Set<{ x: number; y: number }> =
-        piece.getAllowedMoves();
+      var possibleMoves: Set<Move> = piece.getMoves(x, y);
+      var currentSquare = boardCopy.getSquare(x, y)!;
+      possibleMoves = GameValidator.validateMoves(
+        possibleMoves,
+        { x: x, y: y },
+        boardCopy
+      );
+
       possibleMoves.forEach(function (move) {
         boardCopy.highlightedSquares.add(
-          JSON.stringify({ x: y + move.x, y: x + move.y })
+          JSON.stringify({
+            x: move.destination.x,
+            y: move.destination.y,
+          })
         );
       });
 
       boardCopy.selectionMode = 1;
       setBoard(boardCopy);
     } else if (board.selectionMode === 1) {
-      if (boardCopy.highlightedSquares.has(JSON.stringify({ x: y, y: x }))) {
+      if (boardCopy.highlightedSquares.has(JSON.stringify({ x: x, y: y }))) {
         boardCopy.highlightedSquares.clear();
         var lastSquare = boardCopy.lastSelectedSquare;
         boardCopy.movePiece(lastSquare!.x, lastSquare!.y, x, y);

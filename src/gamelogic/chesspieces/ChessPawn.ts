@@ -1,17 +1,32 @@
+import Move, { MoveType } from "../Move";
+import MoveGenerator from "../MoveGenerator";
 import ChessPiece from "./ChessPiece";
 
 class ChessPawn extends ChessPiece {
-  constructor(player: number) {
+  readonly boardHeight;
+  constructor(player: number, boardHeight: number) {
     super(player);
-
-    //TODO: change the way moves are done
-    //adds all allowed moves to the piece
-    this.moves.add({ x: 0, y: 1 });
-    this.moves.add({ x: 0, y: 2 });
+    this.boardHeight = boardHeight;
   }
 
   getLetter(): String {
     return "♙";
+  }
+
+  getMoves(x: number, y: number) {
+    let moveList = new Set<Move>();
+    console.log(this.boardHeight);
+
+    MoveGenerator.generatePawnMoves(
+      x,
+      y,
+      this.player === 1 ? 1 : -1,
+      this.boardHeight
+    ).forEach(function (move) {
+      moveList.add(move);
+    });
+
+    return moveList;
   }
 
   getPicture(): string {

@@ -14,8 +14,8 @@ export function Board(props: {
   ) {
     let isHighlighted = props.highlightedSquares.has(
       JSON.stringify({
-        x: columnIndex,
-        y: rowIndex,
+        x: rowIndex,
+        y: columnIndex,
       })
     );
     return (
@@ -29,10 +29,10 @@ export function Board(props: {
   }
 
   function renderBoard() {
-    return props.chessBoard.map((row, rowIndex) => {
+    return props.chessBoard.map((column, columnIndex) => {
       return (
         <div className="board-row">
-          {row.map((chessSquare, columnIndex) =>
+          {column.map((chessSquare, rowIndex) =>
             renderSquare(chessSquare, rowIndex, columnIndex)
           )}
         </div>
