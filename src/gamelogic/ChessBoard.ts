@@ -19,6 +19,8 @@ class ChessBoard {
 
   public highlightedSquares: Set<string>;
 
+  public activePlayer = 1;
+
   constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
@@ -108,6 +110,10 @@ class ChessBoard {
 
   public setSelectionMode(mode: number) {
     this.selectionMode = mode;
+  }
+
+  public nextPlayer() {
+    this.activePlayer = (this.activePlayer + 1) % 2;
   }
 }
 

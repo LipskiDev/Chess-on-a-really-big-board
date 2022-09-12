@@ -24,39 +24,46 @@ function Game(props: { chessBoard: ChessBoard }) {
     let boardCopy: ChessBoard = Object.create(board);
     var piece: ChessPiece | null = boardCopy.getSquare(x, y)!.piece;
 
+
+
     if (board.selectionMode === -1) {
-      boardCopy.highlightedSquares.clear();
+      if (boardCopy.activePlayer === boardCopy.getSquare(x, y)?.piece?.player) {
 
-      if (piece === null) {
-        setBoard(boardCopy);
-        return;
-      }
-      boardCopy.lastSelectedSquare = { x: x, y: y };
+        boardCopy.highlightedSquares.clear();
 
-      var possibleMoves: Set<Move> = piece.getMoves(x, y);
-      var currentSquare = boardCopy.getSquare(x, y)!;
-      possibleMoves = GameValidator.validateMoves(
-        possibleMoves,
-        { x: x, y: y },
-        boardCopy
-      );
+        if (piece === null) {
+          setBoard(boardCopy);
+          return;
+        }
+        boardCopy.lastSelectedSquare = { x: x, y: y };
 
-      possibleMoves.forEach(function (move) {
-        boardCopy.highlightedSquares.add(
-          JSON.stringify({
-            x: move.destination.x,
-            y: move.destination.y,
-          })
+        var possibleMoves: Set<Move> = piece.getMoves(x, y);
+        var currentSquare = boardCopy.getSquare(x, y)!;
+        possibleMoves = GameValidator.validateMoves(
+          possibleMoves,
+          { x: x, y: y },
+          boardCopy
         );
-      });
 
-      boardCopy.selectionMode = 1;
-      setBoard(boardCopy);
+        possibleMoves.forEach(function (move) {
+          boardCopy.highlightedSquares.add(
+            JSON.stringify({
+              x: move.destination.x,
+              y: move.destination.y,
+            })
+          );
+        });
+
+        boardCopy.selectionMode = 1;
+
+        setBoard(boardCopy);
+      }
     } else if (board.selectionMode === 1) {
       if (boardCopy.highlightedSquares.has(JSON.stringify({ x: x, y: y }))) {
         boardCopy.highlightedSquares.clear();
         var lastSquare = boardCopy.lastSelectedSquare;
         boardCopy.movePiece(lastSquare!.x, lastSquare!.y, x, y);
+        boardCopy.nextPlayer();
       } else {
         boardCopy.highlightedSquares.clear();
       }

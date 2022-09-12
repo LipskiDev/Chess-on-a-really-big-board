@@ -40,7 +40,7 @@ class GameValidator {
         }
       }
 
-      //checks if the move done takes another piece
+      //checks if the move takes another piece
       if (move.moveType.includes(MoveType.take)) {
         if (moveSquare?.piece === null) {
           return;
