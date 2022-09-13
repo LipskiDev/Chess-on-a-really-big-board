@@ -1,17 +1,25 @@
+import Coordinates from "../utils/Coordinates";
+import ChessPiece from "./chesspieces/ChessPiece";
+
 class Move {
-  destination: { x: number; y: number };
-  path: { x: number; y: number }[];
+  origin: Coordinates;
+  destination: Coordinates;
+  path: Coordinates[];
   moveType: MoveType[];
 
   constructor(
-    destination: { x: number; y: number },
-    path: { x: number; y: number }[],
+    origin: Coordinates,
+    destination: Coordinates,
+    path: Coordinates[],
     moveType: MoveType[]
   ) {
+    this.origin = origin;
     this.destination = destination;
     this.path = path;
     this.moveType = moveType;
   }
+
+
 }
 
 export enum MoveType {

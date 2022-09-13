@@ -1,11 +1,14 @@
+import Coordinates from "../utils/Coordinates";
 import ChessBoard from "./ChessBoard";
+import ChessKing from "./chesspieces/ChessKing";
 import ChessSquare from "./ChessSquare";
 import Move, { MoveType } from "./Move";
+import MoveGenerator from "./MoveGenerator";
 
 class GameValidator {
   static validateMoves(
     moveList: Set<Move>,
-    originCoords: { x: number; y: number },
+    originCoords: Coordinates,
     chessBoard: ChessBoard
   ): Set<Move> {
     let originSquare = chessBoard.getSquare(originCoords.x, originCoords.y)!;

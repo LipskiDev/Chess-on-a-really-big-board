@@ -20,6 +20,7 @@ abstract class ChessPiece {
       moves.forEach(function (move) {
         newMoves.add(
           new Move(
+            { x: move.origin.x, y: move.origin.y },
             { x: -move.destination.x, y: -move.destination.y },
             [],
             move.moveType

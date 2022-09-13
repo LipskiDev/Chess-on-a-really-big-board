@@ -1,3 +1,4 @@
+import Coordinates from "../utils/Coordinates";
 import { createMatrix, Matrix } from "../utils/Matrix";
 import ChessBishop from "./chesspieces/ChessBishop";
 import ChessKing from "./chesspieces/ChessKing";
@@ -14,7 +15,7 @@ class ChessBoard {
   public width: number;
   public height: number;
 
-  public lastSelectedSquare: { x: number; y: number } | null;
+  public lastSelectedSquare: Coordinates | null;
   public selectionMode: number;
 
   public highlightedSquares: Set<string>;

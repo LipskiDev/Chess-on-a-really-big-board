@@ -1,3 +1,4 @@
+import Coordinates from "../utils/Coordinates";
 import Move, { MoveType } from "./Move";
 
 class MoveGenerator {
@@ -8,7 +9,7 @@ class MoveGenerator {
     range: number
   ): Set<Move> {
     let diagonalMoves = new Set<Move>();
-    let pathMoves: { x: number; y: number }[];
+    let pathMoves: Coordinates[];
     pathMoves = [];
 
     for (let x = -1; x <= 1; x += 2) {
@@ -16,14 +17,14 @@ class MoveGenerator {
         pathMoves = [];
         for (let it = 1; it <= range; it++) {
           diagonalMoves.add(
-            new Move({ x: startX + it * x, y: startY + it * y }, pathMoves, [
+            new Move(new Coordinates(startX, startY), new Coordinates(startX + it * x, startY + it * y), pathMoves, [
               MoveType.normal,
             ])
           );
-          pathMoves = pathMoves.concat({
-            x: startX + it * x,
-            y: startY + it * y,
-          });
+
+          pathMoves = pathMoves.concat(
+            new Coordinates(startX + it * x, startY + it * y)
+          );
         }
       }
     }
@@ -45,14 +46,13 @@ class MoveGenerator {
       pathMoves = [];
       for (let it = 1; it <= range; it++) {
         horizontalMoves.add(
-          new Move({ x: startX + it * x, y: startY }, pathMoves, [
+          new Move(new Coordinates(startX, startY), new Coordinates(startX + it * x, startY), pathMoves, [
             MoveType.normal,
           ])
         );
-        pathMoves = pathMoves.concat({
-          x: startX + it * x,
-          y: startY,
-        });
+        pathMoves = pathMoves.concat(
+          new Coordinates(startX + it * x, startY)
+        );
       }
     }
 
@@ -73,14 +73,13 @@ class MoveGenerator {
       pathMoves = [];
       for (let it = 1; it <= range; it++) {
         verticalMoves.add(
-          new Move({ x: startX, y: startY + it * y }, pathMoves, [
+          new Move(new Coordinates(startX, startY), new Coordinates(startX, startY + it * y), pathMoves, [
             MoveType.normal,
           ])
         );
-        pathMoves = pathMoves.concat({
-          x: startX,
-          y: startY + it * y,
-        });
+        pathMoves = pathMoves.concat(
+          new Coordinates(startX, startY + it * y)
+        );
       }
     }
 
@@ -100,7 +99,8 @@ class MoveGenerator {
       for (let y = -1; y <= 1; y += 2) {
         offsetMoves.add(
           new Move(
-            { x: startX + xOffset * x, y: startY + yOffset * y },
+            new Coordinates(startX, startY),
+            new Coordinates(startX + xOffset * x, startY + yOffset * y),
             [],
             [MoveType.normal]
           )
@@ -108,7 +108,8 @@ class MoveGenerator {
 
         offsetMoves.add(
           new Move(
-            { x: startX + yOffset * x, y: startY + xOffset * y },
+            new Coordinates(startX, startY),
+            new Coordinates(startX + yOffset * x, startY + xOffset * y),
             [],
             [MoveType.normal]
           )
@@ -128,36 +129,38 @@ class MoveGenerator {
   ): Set<Move> {
     let pawnMoves = new Set<Move>();
     let range = boardHeight / 2 - 2;
-    let pathMoves: { x: number; y: number }[];
+    let pathMoves: Coordinates[];
     pathMoves = [];
 
     //generates all vertical moves a pawn can take
     for (let i = 1; i <= range; i++) {
       pawnMoves.add(
         new Move(
-          { x: startX + 0, y: startY + i * direction },
+          new Coordinates(startX, startY),
+          new Coordinates(startX, startY + i * direction),
           pathMoves,
           i === 1 ? [MoveType.noTake] : [MoveType.start, MoveType.noTake]
         )
       );
 
-      pathMoves = pathMoves.concat({
-        x: startX + 0,
-        y: startY + i * direction,
-      });
+      pathMoves = pathMoves.concat(
+        new Coordinates(startX, startY + i * direction),
+      );
     }
 
     //generates both diagonal moves which a pawn can only take with
     pawnMoves.add(
       new Move(
-        { x: startX + 1, y: startY + 1 * direction },
+        new Coordinates(startX, startY),
+        new Coordinates(startX + 1, startY + 1 * direction),
         [],
         [MoveType.take]
       )
     );
     pawnMoves.add(
       new Move(
-        { x: startX - 1, y: startY + 1 * direction },
+        new Coordinates(startX, startY),
+        new Coordinates(startX - 1, startY + 1 * direction),
         [],
         [MoveType.take]
       )

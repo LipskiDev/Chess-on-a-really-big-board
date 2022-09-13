@@ -5,6 +5,7 @@ import ChessPiece from "../gamelogic/chesspieces/ChessPiece";
 import MoveValidator from "../gamelogic/GameValidator";
 import Move from "../gamelogic/Move";
 import GameValidator from "../gamelogic/GameValidator";
+import Coordinates from "../utils/Coordinates";
 
 function Game(props: { chessBoard: ChessBoard }) {
   const [board, setBoard] = useState(props.chessBoard);
@@ -26,6 +27,7 @@ function Game(props: { chessBoard: ChessBoard }) {
 
 
 
+
     if (board.selectionMode === -1) {
       if (boardCopy.activePlayer === boardCopy.getSquare(x, y)?.piece?.player) {
 
@@ -35,13 +37,13 @@ function Game(props: { chessBoard: ChessBoard }) {
           setBoard(boardCopy);
           return;
         }
-        boardCopy.lastSelectedSquare = { x: x, y: y };
+        boardCopy.lastSelectedSquare = new Coordinates(x, y);
 
         var possibleMoves: Set<Move> = piece.getMoves(x, y);
         var currentSquare = boardCopy.getSquare(x, y)!;
         possibleMoves = GameValidator.validateMoves(
           possibleMoves,
-          { x: x, y: y },
+          new Coordinates(x, y),
           boardCopy
         );
 
@@ -63,6 +65,7 @@ function Game(props: { chessBoard: ChessBoard }) {
         boardCopy.highlightedSquares.clear();
         var lastSquare = boardCopy.lastSelectedSquare;
         boardCopy.movePiece(lastSquare!.x, lastSquare!.y, x, y);
+        //movePiece(boardCopy.getSquare(x, y)?.piece ,new Move({x: lastSquare?.x, y: lastSquare?.y}, ))
         boardCopy.nextPlayer();
       } else {
         boardCopy.highlightedSquares.clear();
@@ -70,6 +73,12 @@ function Game(props: { chessBoard: ChessBoard }) {
       boardCopy.setSelectionMode(-1);
       setBoard(boardCopy);
     }
+  }
+
+  function movePiece(piece: ChessPiece, move: Move) {
+    let boardCopy: ChessBoard = Object.create(board);
+    boardCopy.movePiece(move.origin.x, move.origin.y, move.destination.x, move.destination.y);
+    setBoard(boardCopy);
   }
 }
 
