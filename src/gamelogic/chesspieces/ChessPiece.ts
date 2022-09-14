@@ -1,3 +1,5 @@
+import Coordinates from "../../utils/Coordinates";
+import MoveSet from "../../utils/MoveSet";
 import Move, { MoveType } from "../Move";
 
 abstract class ChessPiece {
@@ -11,7 +13,7 @@ abstract class ChessPiece {
 
   //TODO: change the way moves are done
   //returns the negated moves in case the player plays black
-  abstract getMoves(x: number, y: number): Set<Move>;
+  abstract getMoves(x: number, y: number): MoveSet;
 
   reverseForBlack(moves: Set<Move>) {
     let newMoves = new Set<Move>();
@@ -20,8 +22,8 @@ abstract class ChessPiece {
       moves.forEach(function (move) {
         newMoves.add(
           new Move(
-            { x: move.origin.x, y: move.origin.y },
-            { x: -move.destination.x, y: -move.destination.y },
+            new Coordinates(move.origin.x, move.origin.y),
+            new Coordinates(-move.origin.x, -move.origin.y),
             [],
             move.moveType
           )

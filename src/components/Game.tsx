@@ -6,16 +6,18 @@ import MoveValidator from "../gamelogic/GameValidator";
 import Move from "../gamelogic/Move";
 import GameValidator from "../gamelogic/GameValidator";
 import Coordinates from "../utils/Coordinates";
+import MoveSet from "../utils/MoveSet";
 
 function Game(props: { chessBoard: ChessBoard }) {
   const [board, setBoard] = useState(props.chessBoard);
+
   return (
     <div className="container-mega-game-div">
       <div className="game-board">
         <Board
           chessBoard={props.chessBoard.chessBoard}
           onClick={(x: number, y: number) => handleClick(x, y)}
-          highlightedSquares={props.chessBoard.highlightedSquares}
+          possibleMoves={props.chessBoard.possibleMoves}
         />
       </div>
     </div>
@@ -31,7 +33,7 @@ function Game(props: { chessBoard: ChessBoard }) {
     if (board.selectionMode === -1) {
       if (boardCopy.activePlayer === boardCopy.getSquare(x, y)?.piece?.player) {
 
-        boardCopy.highlightedSquares.clear();
+        boardCopy.possibleMoves.clear();
 
         if (piece === null) {
           setBoard(boardCopy);
@@ -39,7 +41,7 @@ function Game(props: { chessBoard: ChessBoard }) {
         }
         boardCopy.lastSelectedSquare = new Coordinates(x, y);
 
-        var possibleMoves: Set<Move> = piece.getMoves(x, y);
+        var possibleMoves: MoveSet = piece.getMoves(x, y);
         var currentSquare = boardCopy.getSquare(x, y)!;
         possibleMoves = GameValidator.validateMoves(
           possibleMoves,
@@ -48,27 +50,26 @@ function Game(props: { chessBoard: ChessBoard }) {
         );
 
         possibleMoves.forEach(function (move) {
-          boardCopy.highlightedSquares.add(
-            JSON.stringify({
-              x: move.destination.x,
-              y: move.destination.y,
-            })
+          boardCopy.possibleMoves.add(
+            move
           );
         });
-
+        console.log(boardCopy.possibleMoves)
         boardCopy.selectionMode = 1;
 
         setBoard(boardCopy);
       }
     } else if (board.selectionMode === 1) {
-      if (boardCopy.highlightedSquares.has(JSON.stringify({ x: x, y: y }))) {
-        boardCopy.highlightedSquares.clear();
+      if (boardCopy.possibleMoves.containsDestination(new Coordinates(x, y))) {
+        console.log("hello there");
+        boardCopy.possibleMoves.clear();
         var lastSquare = boardCopy.lastSelectedSquare;
         boardCopy.movePiece(lastSquare!.x, lastSquare!.y, x, y);
         //movePiece(boardCopy.getSquare(x, y)?.piece ,new Move({x: lastSquare?.x, y: lastSquare?.y}, ))
         boardCopy.nextPlayer();
       } else {
-        boardCopy.highlightedSquares.clear();
+        console.log("not so hello");
+        boardCopy.possibleMoves.clear();
       }
       boardCopy.setSelectionMode(-1);
       setBoard(boardCopy);

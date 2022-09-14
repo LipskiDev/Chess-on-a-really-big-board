@@ -1,4 +1,5 @@
 import Coordinates from "../utils/Coordinates";
+import MoveSet from "../utils/MoveSet";
 import ChessBoard from "./ChessBoard";
 import ChessKing from "./chesspieces/ChessKing";
 import ChessSquare from "./ChessSquare";
@@ -7,13 +8,13 @@ import MoveGenerator from "./MoveGenerator";
 
 class GameValidator {
   static validateMoves(
-    moveList: Set<Move>,
+    moveList: MoveSet,
     originCoords: Coordinates,
     chessBoard: ChessBoard
-  ): Set<Move> {
+  ): MoveSet {
     let originSquare = chessBoard.getSquare(originCoords.x, originCoords.y)!;
     console.log(moveList);
-    let allowedMoves = new Set<Move>();
+    let allowedMoves = new MoveSet;
     let isAllowed = true;
 
     //checks each move if it is allowed or not
@@ -29,10 +30,7 @@ class GameValidator {
 
       //checks if it is the first move a piece has done (right now exclusive for pawns)
       if (move.moveType.includes(MoveType.start)) {
-        if (
-          chessBoard.getSquare(originCoords.x, originCoords.y)?.piece
-            ?.player === 1
-        ) {
+        if (chessBoard.getSquare(originCoords.x, originCoords.y)?.piece?.player === 1) {
           if (originCoords.y !== 1) {
             return;
           }

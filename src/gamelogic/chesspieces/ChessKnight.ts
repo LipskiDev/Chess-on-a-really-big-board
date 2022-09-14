@@ -1,3 +1,4 @@
+import MoveSet from "../../utils/MoveSet";
 import Move, { MoveType } from "../Move";
 import MoveGenerator from "../MoveGenerator";
 import ChessPiece from "./ChessPiece";
@@ -8,7 +9,7 @@ class ChessKnight extends ChessPiece {
   }
 
   getMoves(x: number, y: number) {
-    let moveList = new Set<Move>();
+    let moveList = new MoveSet;
 
     MoveGenerator.generateCustomOffsetMoves(x, y, 1, 2).forEach(function (
       move

@@ -1,23 +1,22 @@
 import ChessSquare from "../gamelogic/ChessSquare";
+import Move from "../gamelogic/Move";
+import Coordinates from "../utils/Coordinates";
 import { Matrix } from "../utils/Matrix";
+import MoveSet from "../utils/MoveSet";
 import { Square } from "./Square";
 
 export function Board(props: {
   chessBoard: Matrix<ChessSquare>;
   onClick: any;
-  highlightedSquares: Set<string>;
+  possibleMoves: MoveSet;
 }) {
   function renderSquare(
     chessSquare: ChessSquare,
     rowIndex: number,
     columnIndex: number
   ) {
-    let isHighlighted = props.highlightedSquares.has(
-      JSON.stringify({
-        x: rowIndex,
-        y: columnIndex,
-      })
-    );
+    let isHighlighted = props.possibleMoves.containsDestination(new Coordinates(rowIndex, columnIndex));
+
     return (
       <Square
         chessSquare={chessSquare}

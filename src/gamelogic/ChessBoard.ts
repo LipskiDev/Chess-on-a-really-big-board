@@ -1,5 +1,6 @@
 import Coordinates from "../utils/Coordinates";
 import { createMatrix, Matrix } from "../utils/Matrix";
+import MoveSet from "../utils/MoveSet";
 import ChessBishop from "./chesspieces/ChessBishop";
 import ChessKing from "./chesspieces/ChessKing";
 import ChessKnight from "./chesspieces/ChessKnight";
@@ -8,6 +9,7 @@ import ChessPiece from "./chesspieces/ChessPiece";
 import ChessQueen from "./chesspieces/ChessQueen";
 import ChessRook from "./chesspieces/ChessRook";
 import ChessSquare from "./ChessSquare";
+import Move from "./Move";
 
 class ChessBoard {
   public chessBoard: Matrix<ChessSquare>;
@@ -18,7 +20,7 @@ class ChessBoard {
   public lastSelectedSquare: Coordinates | null;
   public selectionMode: number;
 
-  public highlightedSquares: Set<string>;
+  public possibleMoves: MoveSet;
 
   public activePlayer = 1;
 
@@ -28,7 +30,7 @@ class ChessBoard {
     this.lastSelectedSquare = null;
     this.selectionMode = -1;
 
-    this.highlightedSquares = new Set<string>();
+    this.possibleMoves = new MoveSet;
 
     this.chessBoard = createMatrix<ChessSquare>(
       this.width,

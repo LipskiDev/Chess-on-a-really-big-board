@@ -39,7 +39,7 @@ class MoveGenerator {
     range: number
   ): Set<Move> {
     let horizontalMoves = new Set<Move>();
-    let pathMoves: { x: number; y: number }[];
+    let pathMoves: Coordinates[];
     pathMoves = [];
 
     for (let x = -1; x <= 1; x += 2) {
@@ -66,7 +66,7 @@ class MoveGenerator {
     range: number
   ): Set<Move> {
     let verticalMoves = new Set<Move>();
-    let pathMoves: { x: number; y: number }[];
+    let pathMoves: Coordinates[];
     pathMoves = [];
 
     for (let y = -1; y <= 1; y += 2) {
