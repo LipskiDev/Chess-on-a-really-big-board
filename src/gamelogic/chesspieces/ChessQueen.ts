@@ -1,3 +1,4 @@
+import MoveSet from "../../utils/MoveSet";
 import Move from "../Move";
 import MoveGenerator from "../MoveGenerator";
 import ChessPiece from "./ChessPiece";
@@ -12,7 +13,7 @@ class ChessQueen extends ChessPiece {
   }
 
   getMoves(x: number, y: number) {
-    let moveList = new Set<Move>();
+    let moveList = new MoveSet;
 
     MoveGenerator.generateHorizontalMoves(x, y, 100).forEach(function (move) {
       moveList.add(move);
