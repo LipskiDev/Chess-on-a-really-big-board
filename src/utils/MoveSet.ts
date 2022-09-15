@@ -1,49 +1,53 @@
 import Move from "../gamelogic/Move";
 import Coordinates from "./Coordinates";
 
-class MoveSet {
-    moveset: Move[];
-    constructor() {
-        this.moveset = [];
+export default class MoveSet {
+  public moveset: Move[];
+
+  constructor() {
+    this.moveset = [];
+  }
+
+  public static equals(move1: Move, move2: Move): boolean {
+    return (
+      move1.destination.equals(move2.destination) &&
+      move1.moveType === move2.moveType &&
+      move1.origin.equals(move2.origin) &&
+      move1.path === move2.path
+    );
+  }
+
+  public add(move: Move): void {
+    if (this.has(move)) return;
+
+    this.moveset.push(move);
+  }
+
+  public has(move: Move): boolean {
+    for (const existingMove of this.moveset) {
+      if (MoveSet.equals(existingMove, move)) {
+        return true;
+      }
     }
 
-    add(move: Move): void {
-        if (this.has(move)) return;
-        this.moveset.push(move);
+    return false;
+  }
+
+  public containsDestination(destination: Coordinates): boolean {
+    for (const move of this.moveset) {
+      if (move.destination.equals(destination)) {
+        return true;
+      }
     }
 
-    has(containsMove: Move): boolean {
-        let contains = false;
-        this.moveset.forEach(function (move) {
-            if (move.destination.equals(containsMove.destination)
-                && move.moveType === containsMove.moveType
-                && move.origin.equals(containsMove.origin)
-                && move.path === containsMove.path) {
-                contains = true;
-            }
+    return false;
+  }
 
-        });
-        return contains;
-    }
+  public clear(): void {
+    this.moveset = [];
+  }
 
-    containsDestination(containsDestination: Coordinates): boolean {
-        let contains = false;
-        this.moveset.forEach(function (move) {
-            if (move.destination.equals(containsDestination)) {
-                contains = true;
-            }
-
-        });
-        return contains;
-    }
-
-    clear() {
-        this.moveset = [];
-    }
-
-    forEach(f: ((x: Move) => void)) {
-        this.moveset.forEach(f);
-    }
+  public forEach(fn: (move: Move) => void): void {
+    this.moveset.forEach(fn);
+  }
 }
-
-export default MoveSet
