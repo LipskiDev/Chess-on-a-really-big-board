@@ -8,24 +8,44 @@ class MoveGenerator {
     startY: number,
     range: number
   ): Set<Move> {
-    let diagonalMoves = new Set<Move>();
-    let pathMoves: Coordinates[];
-    pathMoves = [];
+    const diagonalMoves = new Set<Move>();
+    let pathMoves: Coordinates[] = [];
 
-    for (let x = -1; x <= 1; x += 2) {
-      for (let y = -1; y <= 1; y += 2) {
-        pathMoves = [];
-        for (let it = 1; it <= range; it++) {
-          diagonalMoves.add(
-            new Move(new Coordinates(startX, startY), new Coordinates(startX + it * x, startY + it * y), pathMoves, [
-              MoveType.normal,
-            ])
-          );
+    const directions = [
+      {
+        x: 1,
+        y: 1,
+      },
+      {
+        x: 1,
+        y: -1,
+      },
+      {
+        x: -1,
+        y: 1,
+      },
+      {
+        x: -1,
+        y: -1,
+      },
+    ];
 
-          pathMoves = pathMoves.concat(
-            new Coordinates(startX + it * x, startY + it * y)
-          );
-        }
+    for (const { x, y } of directions) {
+      pathMoves = [];
+
+      for (let it = 1; it <= range; it++) {
+        diagonalMoves.add(
+          new Move(
+            new Coordinates(startX, startY),
+            new Coordinates(startX + it * x, startY + it * y),
+            pathMoves,
+            [MoveType.normal]
+          )
+        );
+
+        pathMoves = pathMoves.concat(
+          new Coordinates(startX + it * x, startY + it * y)
+        );
       }
     }
 
@@ -46,13 +66,14 @@ class MoveGenerator {
       pathMoves = [];
       for (let it = 1; it <= range; it++) {
         horizontalMoves.add(
-          new Move(new Coordinates(startX, startY), new Coordinates(startX + it * x, startY), pathMoves, [
-            MoveType.normal,
-          ])
+          new Move(
+            new Coordinates(startX, startY),
+            new Coordinates(startX + it * x, startY),
+            pathMoves,
+            [MoveType.normal]
+          )
         );
-        pathMoves = pathMoves.concat(
-          new Coordinates(startX + it * x, startY)
-        );
+        pathMoves = pathMoves.concat(new Coordinates(startX + it * x, startY));
       }
     }
 
@@ -73,13 +94,14 @@ class MoveGenerator {
       pathMoves = [];
       for (let it = 1; it <= range; it++) {
         verticalMoves.add(
-          new Move(new Coordinates(startX, startY), new Coordinates(startX, startY + it * y), pathMoves, [
-            MoveType.normal,
-          ])
+          new Move(
+            new Coordinates(startX, startY),
+            new Coordinates(startX, startY + it * y),
+            pathMoves,
+            [MoveType.normal]
+          )
         );
-        pathMoves = pathMoves.concat(
-          new Coordinates(startX, startY + it * y)
-        );
+        pathMoves = pathMoves.concat(new Coordinates(startX, startY + it * y));
       }
     }
 
@@ -144,7 +166,7 @@ class MoveGenerator {
       );
 
       pathMoves = pathMoves.concat(
-        new Coordinates(startX, startY + i * direction),
+        new Coordinates(startX, startY + i * direction)
       );
     }
 
