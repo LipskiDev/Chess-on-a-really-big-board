@@ -1,31 +1,38 @@
+import Coordinates from "../../utils/Coordinates";
 import MoveSet from "../../utils/MoveSet";
 import Move from "../Move";
 import MoveGenerator from "../MoveGenerator";
 import ChessPiece from "./ChessPiece";
 
 class ChessKing extends ChessPiece {
-  constructor(player: number) {
+  boardWidth: number;
+  constructor(player: number, boardWidth: number) {
     super(player);
+    this.boardWidth = boardWidth;
   }
 
   getLetter() {
     return "♔";
   }
 
-  getMoves(x: number, y: number) {
+  getMoves(coordinates: Coordinates) {
     let moveList = new MoveSet;
 
-    MoveGenerator.generateHorizontalMoves(x, y, 1).forEach(function (move) {
+    MoveGenerator.generateHorizontalMoves(coordinates, 1).forEach(function (move) {
       moveList.add(move);
     });
 
-    MoveGenerator.generateVerticalMoves(x, y, 1).forEach(function (move) {
+    MoveGenerator.generateVerticalMoves(coordinates, 1).forEach(function (move) {
       moveList.add(move);
     });
 
-    MoveGenerator.generateDiagonalMoves(x, y, 1).forEach(function (move) {
+    MoveGenerator.generateDiagonalMoves(coordinates, 1).forEach(function (move) {
       moveList.add(move);
     });
+
+    MoveGenerator.generateKingsCastleMoves(coordinates, this.boardWidth).forEach(function (move) {
+      moveList.add(move);
+    })
 
     return moveList;
   }

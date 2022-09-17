@@ -1,3 +1,4 @@
+import Coordinates from "../../utils/Coordinates";
 import MoveSet from "../../utils/MoveSet";
 import Move, { MoveType } from "../Move";
 import MoveGenerator from "../MoveGenerator";
@@ -14,13 +15,12 @@ class ChessPawn extends ChessPiece {
     return "♙";
   }
 
-  getMoves(x: number, y: number) {
+  getMoves(coordinates: Coordinates) {
     let moveList = new MoveSet;
     console.log(this.boardHeight);
 
     MoveGenerator.generatePawnMoves(
-      x,
-      y,
+      coordinates,
       this.player === 1 ? 1 : -1,
       this.boardHeight
     ).forEach(function (move) {

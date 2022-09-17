@@ -37,6 +37,17 @@ class MoveSet {
         return contains;
     }
 
+    getMoveForDestination(getDestination: Coordinates): Move {
+        let returnMove = new Move(new Coordinates(-1, -1), new Coordinates(-1, -1), [], []);
+        this.moveset.forEach(function (move) {
+            if (getDestination.equals(move.destination)) {
+                console.log("TRUEEEEEEEE")
+                returnMove = move;
+            }
+        });
+        return returnMove;
+    }
+
     clear() {
         this.moveset = [];
     }

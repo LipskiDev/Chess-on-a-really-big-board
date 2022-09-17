@@ -8,7 +8,7 @@ class Coordinates {
     }
 
     equals(coordinates: Coordinates): boolean {
-        return (this.x === coordinates.x && this.y === coordinates.y)
+        return this.x === coordinates.x && this.y === coordinates.y;
     }
 }
 

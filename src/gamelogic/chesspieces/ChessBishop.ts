@@ -1,3 +1,4 @@
+import Coordinates from "../../utils/Coordinates";
 import MoveSet from "../../utils/MoveSet";
 import Move from "../Move";
 import MoveGenerator from "../MoveGenerator";
@@ -15,10 +16,10 @@ class ChessBishop extends ChessPiece {
     return "♗";
   }
 
-  getMoves(x: number, y: number) {
+  getMoves(coordinates: Coordinates) {
     let moveList = new MoveSet;
 
-    MoveGenerator.generateDiagonalMoves(x, y, 100).forEach(function (move) {
+    MoveGenerator.generateDiagonalMoves(coordinates, 100).forEach(function (move) {
       moveList.add(move);
     });
 

@@ -25,13 +25,13 @@ function Game(props: { chessBoard: ChessBoard }) {
 
   function handleClick(x: number, y: number) {
     let boardCopy: ChessBoard = Object.create(board);
-    var piece: ChessPiece | null = boardCopy.getSquare(x, y)!.piece;
+    var piece: ChessPiece | null = boardCopy.getSquare(new Coordinates(x, y))!.piece;
 
 
 
 
     if (board.selectionMode === -1) {
-      if (boardCopy.activePlayer === boardCopy.getSquare(x, y)?.piece?.player) {
+      if (boardCopy.activePlayer === boardCopy.getSquare(new Coordinates(x, y))?.piece?.player) {
 
         boardCopy.possibleMoves.clear();
 
@@ -41,8 +41,8 @@ function Game(props: { chessBoard: ChessBoard }) {
         }
         boardCopy.lastSelectedSquare = new Coordinates(x, y);
 
-        var possibleMoves: MoveSet = piece.getMoves(x, y);
-        var currentSquare = boardCopy.getSquare(x, y)!;
+        var possibleMoves: MoveSet = piece.getMoves(new Coordinates(x, y));
+        var currentSquare = boardCopy.getSquare(new Coordinates(x, y))!;
         possibleMoves = GameValidator.validateMoves(
           possibleMoves,
           new Coordinates(x, y),
@@ -61,14 +61,13 @@ function Game(props: { chessBoard: ChessBoard }) {
       }
     } else if (board.selectionMode === 1) {
       if (boardCopy.possibleMoves.containsDestination(new Coordinates(x, y))) {
-        console.log("hello there");
+        let todo = boardCopy.possibleMoves.getMoveForDestination(new Coordinates(x, y));
+
         boardCopy.possibleMoves.clear();
         var lastSquare = boardCopy.lastSelectedSquare;
-        boardCopy.movePiece(lastSquare!.x, lastSquare!.y, x, y);
-        //movePiece(boardCopy.getSquare(x, y)?.piece ,new Move({x: lastSquare?.x, y: lastSquare?.y}, ))
+        boardCopy = evalMove(boardCopy.getSquare(new Coordinates(x, y))!.piece, todo, boardCopy);
         boardCopy.nextPlayer();
       } else {
-        console.log("not so hello");
         boardCopy.possibleMoves.clear();
       }
       boardCopy.setSelectionMode(-1);
@@ -76,10 +75,11 @@ function Game(props: { chessBoard: ChessBoard }) {
     }
   }
 
-  function movePiece(piece: ChessPiece, move: Move) {
-    let boardCopy: ChessBoard = Object.create(board);
-    boardCopy.movePiece(move.origin.x, move.origin.y, move.destination.x, move.destination.y);
-    setBoard(boardCopy);
+  function evalMove(piece: ChessPiece | null, move: Move, chessBoard: ChessBoard): ChessBoard {
+
+    chessBoard.movePiece(move.origin, move.destination);
+    chessBoard.getSquare(move.destination)?.piece?.setHasMoved();
+    return chessBoard;
   }
 }
 

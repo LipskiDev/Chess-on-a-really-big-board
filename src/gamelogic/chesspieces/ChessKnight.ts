@@ -1,3 +1,4 @@
+import Coordinates from "../../utils/Coordinates";
 import MoveSet from "../../utils/MoveSet";
 import Move, { MoveType } from "../Move";
 import MoveGenerator from "../MoveGenerator";
@@ -8,10 +9,10 @@ class ChessKnight extends ChessPiece {
     super(player);
   }
 
-  getMoves(x: number, y: number) {
+  getMoves(coordinates: Coordinates) {
     let moveList = new MoveSet;
 
-    MoveGenerator.generateCustomOffsetMoves(x, y, 1, 2).forEach(function (
+    MoveGenerator.generateCustomOffsetMoves(coordinates, 1, 2).forEach(function (
       move
     ) {
       moveList.add(move);

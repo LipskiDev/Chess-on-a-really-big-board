@@ -1,16 +1,20 @@
 import Coordinates from "../utils/Coordinates";
+import MoveSet from "../utils/MoveSet";
 import Move, { MoveType } from "./Move";
 
 class MoveGenerator {
+
   //generates all possible diagonal moves
   public static generateDiagonalMoves(
-    startX: number,
-    startY: number,
+    coordinates: Coordinates,
     range: number
-  ): Set<Move> {
-    let diagonalMoves = new Set<Move>();
+  ): MoveSet {
+    let diagonalMoves = new MoveSet;
     let pathMoves: Coordinates[];
     pathMoves = [];
+
+    let startX = coordinates.x;
+    let startY = coordinates.y;
 
     for (let x = -1; x <= 1; x += 2) {
       for (let y = -1; y <= 1; y += 2) {
@@ -34,13 +38,15 @@ class MoveGenerator {
 
   //generates all possible horizontal moves
   public static generateHorizontalMoves(
-    startX: number,
-    startY: number,
+    coordinates: Coordinates,
     range: number
-  ): Set<Move> {
-    let horizontalMoves = new Set<Move>();
+  ): MoveSet {
+    let horizontalMoves = new MoveSet;
     let pathMoves: Coordinates[];
     pathMoves = [];
+
+    let startX = coordinates.x;
+    let startY = coordinates.y;
 
     for (let x = -1; x <= 1; x += 2) {
       pathMoves = [];
@@ -61,13 +67,15 @@ class MoveGenerator {
 
   //generates all possible vertical moves
   public static generateVerticalMoves(
-    startX: number,
-    startY: number,
+    coordinates: Coordinates,
     range: number
-  ): Set<Move> {
-    let verticalMoves = new Set<Move>();
+  ): MoveSet {
+    let verticalMoves = new MoveSet;
     let pathMoves: Coordinates[];
     pathMoves = [];
+
+    let startX = coordinates.x;
+    let startY = coordinates.y;
 
     for (let y = -1; y <= 1; y += 2) {
       pathMoves = [];
@@ -88,12 +96,14 @@ class MoveGenerator {
 
   //generates all possible custom offset moves (e.g. knight)
   public static generateCustomOffsetMoves(
-    startX: number,
-    startY: number,
+    coordinates: Coordinates,
     xOffset: number,
     yOffset: number
-  ): Set<Move> {
-    let offsetMoves = new Set<Move>();
+  ): MoveSet {
+    let offsetMoves = new MoveSet;
+
+    let startX = coordinates.x;
+    let startY = coordinates.y;
 
     for (let x = -1; x <= 1; x += 2) {
       for (let y = -1; y <= 1; y += 2) {
@@ -122,14 +132,15 @@ class MoveGenerator {
 
   //generates all moves the pawn can make
   public static generatePawnMoves(
-    startX: number,
-    startY: number,
+    coordinates: Coordinates,
     direction: number,
     boardHeight: number
-  ): Set<Move> {
-    let pawnMoves = new Set<Move>();
+  ): MoveSet {
+    let pawnMoves = new MoveSet;
     let range = boardHeight / 2 - 2;
     let pathMoves: Coordinates[];
+    let startX = coordinates.x;
+    let startY = coordinates.y;
     pathMoves = [];
 
     //generates all vertical moves a pawn can take
@@ -167,6 +178,44 @@ class MoveGenerator {
     );
 
     return pawnMoves;
+  }
+
+  static generateKingsCastleMoves(
+    coordinates: Coordinates,
+    width: number
+  ): MoveSet {
+    let castleMoves = new MoveSet;
+    let pathMoves: Coordinates[] = [];
+
+    let startX = coordinates.x;
+    let startY = coordinates.y;
+
+    for (let i = 1; i < width / 2 - 1; i++) {
+      pathMoves.concat(new Coordinates(startX + i, startY))
+    }
+    castleMoves.add(new Move(
+      new Coordinates(startX, startY),
+      new Coordinates(startX + (width / 2 - 2), startY),
+      pathMoves,
+      [MoveType.castles, MoveType.start]
+    ));
+
+    pathMoves = [];
+
+    for (let i = 1; i < width / 2 - 2; i++) {
+      pathMoves.concat(new Coordinates(startX - i, startY))
+    }
+
+    castleMoves.add(new Move(
+      new Coordinates(startX, startY),
+      new Coordinates(startX - (width / 2 - 2), startY),
+      pathMoves,
+      [MoveType.castles, MoveType.start]
+    ));
+
+    return castleMoves;
+
+
   }
 }
 export default MoveGenerator;
