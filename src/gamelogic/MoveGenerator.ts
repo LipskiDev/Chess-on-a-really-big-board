@@ -190,8 +190,8 @@ class MoveGenerator {
     let startX = coordinates.x;
     let startY = coordinates.y;
 
-    for (let i = 1; i < width / 2 - 1; i++) {
-      pathMoves.concat(new Coordinates(startX + i, startY))
+    for (let i = 1; i <= width / 2 - 1; i++) {
+      pathMoves = pathMoves.concat(new Coordinates(startX + i, startY))
     }
     castleMoves.add(new Move(
       new Coordinates(startX, startY),
@@ -200,11 +200,14 @@ class MoveGenerator {
       [MoveType.castles, MoveType.start]
     ));
 
+    console.log(pathMoves);
+
     pathMoves = [];
 
-    for (let i = 1; i < width / 2 - 2; i++) {
-      pathMoves.concat(new Coordinates(startX - i, startY))
+    for (let i = 1; i <= width / 2 - 2; i++) {
+      pathMoves = pathMoves.concat(new Coordinates(startX - i, startY))
     }
+    console.log(pathMoves);
 
     castleMoves.add(new Move(
       new Coordinates(startX, startY),

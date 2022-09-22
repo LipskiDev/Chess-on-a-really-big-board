@@ -9,7 +9,7 @@ import ChessPiece from "./chesspieces/ChessPiece";
 import ChessQueen from "./chesspieces/ChessQueen";
 import ChessRook from "./chesspieces/ChessRook";
 import ChessSquare from "./ChessSquare";
-import Move from "./Move";
+import Move, { MoveType } from "./Move";
 
 class ChessBoard {
   public chessBoard: Matrix<ChessSquare>;
@@ -48,6 +48,7 @@ class ChessBoard {
   private initChessBoard() {
     //upper row
 
+    /*
     this.setPiece(new Coordinates(0, 0), new ChessRook(1));
     this.setPiece(new Coordinates(1, 0), new ChessKnight(1));
     this.setPiece(new Coordinates(2, 0), new ChessBishop(1));
@@ -83,7 +84,50 @@ class ChessBoard {
     this.setPiece(new Coordinates(4, 6), new ChessPawn(0, this.height));
     this.setPiece(new Coordinates(5, 6), new ChessPawn(0, this.height));
     this.setPiece(new Coordinates(6, 6), new ChessPawn(0, this.height));
+    this.setPiece(new Coordinates(7, 6), new ChessPawn(0, this.height));*/
+
+
+    //check-check
+
+    this.setPiece(new Coordinates(0, 0), new ChessRook(1));
+    this.setPiece(new Coordinates(2, 2), new ChessKnight(1));
+    this.setPiece(new Coordinates(7, 5), new ChessBishop(1));
+    this.setPiece(new Coordinates(3, 0), new ChessKing(1, this.width));
+    this.setPiece(new Coordinates(4, 0), new ChessQueen(1));
+    this.setPiece(new Coordinates(5, 0), new ChessBishop(1));
+    this.setPiece(new Coordinates(6, 0), new ChessKnight(1));
+    this.setPiece(new Coordinates(7, 0), new ChessRook(1));
+
+    this.setPiece(new Coordinates(0, 1), new ChessPawn(1, this.height));
+    this.setPiece(new Coordinates(1, 1), new ChessPawn(1, this.height));
+    this.setPiece(new Coordinates(2, 1), new ChessPawn(1, this.height));
+    this.setPiece(new Coordinates(3, 3), new ChessPawn(1, this.height));
+    this.setPiece(new Coordinates(4, 1), new ChessPawn(1, this.height));
+    this.setPiece(new Coordinates(5, 1), new ChessPawn(1, this.height));
+    this.setPiece(new Coordinates(6, 1), new ChessPawn(1, this.height));
+    this.setPiece(new Coordinates(7, 1), new ChessPawn(1, this.height));
+
+    //lower row
+    this.setPiece(new Coordinates(0, 7), new ChessRook(0));
+    this.setPiece(new Coordinates(1, 7), new ChessKnight(0));
+    this.setPiece(new Coordinates(2, 7), new ChessBishop(0));
+    this.setPiece(new Coordinates(3, 7), new ChessKing(0, this.width));
+    //this.setPiece(new Coordinates(4, 7), new ChessQueen(0));
+    //this.setPiece(new Coordinates(6, 4), new ChessBishop(0));
+    //this.setPiece(new Coordinates(6, 7), new ChessKnight(0));
+    this.setPiece(new Coordinates(7, 7), new ChessRook(0));
+
+    this.setPiece(new Coordinates(0, 6), new ChessPawn(0, this.height));
+    this.setPiece(new Coordinates(1, 6), new ChessPawn(0, this.height));
+    this.setPiece(new Coordinates(2, 6), new ChessPawn(0, this.height));
+    this.setPiece(new Coordinates(3, 6), new ChessPawn(0, this.height));
+    this.setPiece(new Coordinates(4, 5), new ChessPawn(0, this.height));
+    this.setPiece(new Coordinates(5, 6), new ChessPawn(0, this.height));
+    this.setPiece(new Coordinates(6, 6), new ChessPawn(0, this.height));
     this.setPiece(new Coordinates(7, 6), new ChessPawn(0, this.height));
+
+
+
   }
 
   //moves a piece from (x1,y1) to (x2,y2)
@@ -96,6 +140,23 @@ class ChessBoard {
     console.log(
       "Moved piece from (" + coordinates1.x + ", " + coordinates1.y + ") to (" + coordinates2.x + ", " + coordinates2.y + ")"
     );
+  }
+
+  public evalMove(move: Move) {
+    let origin = move.origin;
+    let destination = move.destination;
+    if (move.moveType.includes(MoveType.castles)) {
+      //queen side castle
+      if (destination.x > origin.x) {
+        this.movePiece(new Coordinates(7, destination.y), new Coordinates(destination.x - 1, destination.y));
+        this.getSquare(new Coordinates(destination.x - 1, destination.y))?.piece?.setHasMoved;
+      } else {
+        this.movePiece(new Coordinates(0, destination.y), new Coordinates(destination.x + 1, destination.y));
+        this.getSquare(new Coordinates(destination.x + 1, destination.y))?.piece?.setHasMoved;
+      }
+    }
+    this.movePiece(move.origin, move.destination);
+    this.getSquare(move.destination)?.piece?.setHasMoved();
   }
 
   //sets the square at coordinates (x,y) to the given piece newPiece

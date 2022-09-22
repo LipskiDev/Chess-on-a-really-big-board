@@ -65,7 +65,7 @@ function Game(props: { chessBoard: ChessBoard }) {
 
         boardCopy.possibleMoves.clear();
         var lastSquare = boardCopy.lastSelectedSquare;
-        boardCopy = evalMove(boardCopy.getSquare(new Coordinates(x, y))!.piece, todo, boardCopy);
+        boardCopy.evalMove(todo);
         boardCopy.nextPlayer();
       } else {
         boardCopy.possibleMoves.clear();

@@ -9,17 +9,25 @@ import Move, { MoveType } from "./Move";
 import MoveGenerator from "./MoveGenerator";
 
 class GameValidator {
-  static isAllowedMove(move: Move, chessBoard: ChessBoard): boolean {
+  static isAllowedMove(move: Move, chessBoard: ChessBoard, friendlyFire: boolean): boolean {
     let originSquare = chessBoard.getSquare(move.origin)!;
+    let piece = originSquare.piece;
     let originCoords = move.origin;
     let isAllowed = true;
-    //checks if destination square has piece of own team
+
     let moveSquare = chessBoard.getSquare(
       move.destination
     );
-    if (originSquare.piece?.player === moveSquare?.piece?.player) {
-      return false;
+
+
+
+    //checks if destination square has piece of own team
+    if (!friendlyFire) {
+      if (originSquare.piece?.player === moveSquare?.piece?.player) {
+        return false;
+      }
     }
+
 
     //checks if it is the first move a piece has done (right now exclusive for pawns)
     if (move.moveType.includes(MoveType.start)) {
@@ -28,40 +36,76 @@ class GameValidator {
       }
     }
 
-    //checks if the move is an allowed castling move
-    if (move.moveType.includes(MoveType.castles)) {
-      if (!(chessBoard.getSquare(move.origin)!.piece instanceof ChessKing)) {
-        return false;
-      } else {
+    if (piece instanceof ChessKing) {
+      let coordinatesInCheck = getCheckedSquares(chessBoard);
+      let player = chessBoard.getSquare(move.origin)?.piece?.player;
+      if (player === 1) {
+        if (coordinatesInCheck.checkedForWhite.has(move.destination)) {
+          return false;
+        }
+      } else if (player === 0) {
+        if (coordinatesInCheck.checkedForBlack.has(move.destination)) {
+          return false;
+        }
+      }
 
-        let coordinatesInCheck = getCheckedSquares(chessBoard);
+      //checks if the move is an allowed castling move
+      if (move.moveType.includes(MoveType.castles)) {
+        if (!(chessBoard.getSquare(move.origin)!.piece instanceof ChessKing)) {
+          return false;
+        } else {
 
-        //right castles
-        if (move.origin.x < move.destination.x) {
-          let rightRook = chessBoard.getSquare(new Coordinates(move.destination.x + 2, move.destination.y))?.piece;
-          //checks if there is a rook in the right corner
-          if (!(rightRook instanceof ChessRook)) {
-            return false;
-          } else {
-            //checks if the rook hasn't moved yet
-            if (rightRook.hasMoved === true) {
-              return false;
-            }
+
+
+          if (player === 1) {
+            if (coordinatesInCheck.checkedForWhite.has(move.origin)) return false;
+            isAllowed = true;
+            move.path.forEach(function (move) {
+              if (coordinatesInCheck.checkedForWhite.has(move)) {
+                isAllowed = false;
+              }
+            })
+          } else if (player === 0) {
+            if (coordinatesInCheck.checkedForBlack.has(move.origin)) return false;
+            isAllowed = true;
+            move.path.forEach(function (move) {
+              if (coordinatesInCheck.checkedForBlack.has(move)) {
+                isAllowed = false;
+              }
+            })
           }
-        } else
-          //left castles
-          if (move.origin.x > move.destination.x) {
-            let leftRook = chessBoard.getSquare(new Coordinates(move.destination.x - 1, move.destination.y))?.piece;
-            //checks if there is a rook in the left corner
-            if (!(leftRook instanceof ChessRook)) {
+          if (!isAllowed) return false;
+
+          //right castles
+          if (move.origin.x < move.destination.x) {
+            let rightRook = chessBoard.getSquare(new Coordinates(move.destination.x + 2, move.destination.y))?.piece;
+            //checks if there is a rook in the right corner
+            if (!(rightRook instanceof ChessRook)) {
               return false;
             } else {
               //checks if the rook hasn't moved yet
-              if (leftRook.hasMoved === true) {
+              if (rightRook.hasMoved === true) {
                 return false;
               }
             }
-          }
+          } else
+            //left castles
+            if (move.origin.x > move.destination.x) {
+              let leftRook = chessBoard.getSquare(new Coordinates(move.destination.x - 1, move.destination.y))?.piece;
+              //checks if there is a rook in the left corner
+              if (!(leftRook instanceof ChessRook)) {
+                return false;
+              } else {
+                //checks if the rook hasn't moved yet
+                if (leftRook.hasMoved === true) {
+                  return false;
+                }
+              }
+            }
+
+
+
+        }
       }
     }
 
@@ -109,7 +153,7 @@ class GameValidator {
 
     //checks each move if it is allowed or not
     moveList.forEach(function (move) {
-      if (GameValidator.isAllowedMove(move, chessBoard)) {
+      if (GameValidator.isAllowedMove(move, chessBoard, false)) {
         allowedMoves.add(move);
       }
     });
@@ -142,7 +186,7 @@ function getCheckedSquares(chessBoard: ChessBoard): { checkedForWhite: Coordinat
             : checkedSquares.checkedForBlack.add(move.destination);
           return;
         }
-        if ((GameValidator.isAllowedMove(move, chessBoard))) {
+        if ((GameValidator.isAllowedMove(move, chessBoard, true))) {
           if (move.moveType.includes(MoveType.noTake) || move.moveType.includes(MoveType.castles)) return;
 
 
@@ -157,8 +201,7 @@ function getCheckedSquares(chessBoard: ChessBoard): { checkedForWhite: Coordinat
     }
 
   }
-  console.log("piece moves: ")
-  console.log(checkedSquares);
+
   return checkedSquares;
 }
 
